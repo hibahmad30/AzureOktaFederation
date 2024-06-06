@@ -10,15 +10,45 @@ Vulnerability management is essential for organizations to identify and mitigate
 - <b>Okta</b>
 - <b>Microsoft Entra ID</b>
 
-<h2>Prerequisites:</h2> 
+<h2>Create Okta Enterprise App in Microsoft Entra ID</h2> 
 
 <p align="center">
-The Nessus scan will be run on a Windows 10 virtual machine from our host machine. In this analysis the virtual machine will be created using Oracle VirtualBox, however any hypervisor can be used. The download links and instructions are provided as follows:<br /><br />Download Oracle VirtualBox: https://www.virtualbox.org/wiki/Downloads<br />Download Windows 10 Disc Image (ISO File): https://www.microsoft.com/en-us/software-download/windows10<br />Download Nessus Essentials: https://www.tenable.com/products/nessus/nessus-essentials
+To start, we will create an Okta enterprise app in Entra ID, which will allow Azure to communicate with Okta. Before we do this, however, it's important to set-up a break-glass account which will act as a backup account in case of an emergencty. For more information on the importance of break-glass accounts and access, refer to the following link: https://www.strongdm.com/blog/break-glass
+  <br/>
+ <br/>
+Here are the steps in Okta to configure this account: Directory > People > Add person 
  <br/>
  <br/>
-<img src="https://i.imgur.com/dn9QytA.png" height="35%" width="35%" alt="Install Nessus"/>
+<img src="https://i.imgur.com/NBmVOHA.png" alt="Add Okta User"/>
+ <br/>
+ <br/>
+We will then add the new user to the Super Administrator role: User > Admin roles > Edit individual assignments  > Role > Super Administrator > Save Changes 
+ <br/>
+ <br/>
+<img src="https://i.imgur.com/LhGkYf9.png" alt="Super Administrator Role"/>
+  <br/>
+ <br/>
+We will now proceed with creating the enterprise application and adding Entra ID as an identity provider. I will be referencing the steps outlined in the following Okta documentation: 
+<br/>
+<br/>
+https://help.okta.com/en-us/content/topics/provisioning/azure/azure-create-enterprise-app.htm
+<br/>
+<br/>
+https://help.okta.com/en-us/content/topics/provisioning/azure/azure-identify-identity-provider.htm
+<br/>
+<br/>
+Navigate to the following path: Security > Identity Providers > Add identity provider > SAML 2.0 IdP
+ <br/>
+ <br/>
+<img src="https://i.imgur.com/yuHcciM.png" alt="Add IdP/>
+<br/>
+<br/>
+We will now configure SAML 2.0 using the following settings: 
+ <br/>
+ <br/>
+<img src="https://i.imgur.com/jfwtPyg.png" alt="Add IdP/>
+ 
 <h2>Uncredentialed scan:</h2> 
-<p align="center">
 Prior to running the first scan, it is important to verify that the host machine can connect to the virtual machine. In the Windows 10 virtual machine, navigate to the command line and use the 'ipconfig' command to gather the IPv4 address of the system. With this IPv4 address, navigate to the command line of the host machine and type in the command 'ping x.x.x.x,' where 'x.x.x.x' is the IPv4 address of the virtual machine. If the host machine is not able to ping the target machine, navigate to the Windows Defender Firewall (wf.msc) and make the appropriate firewall state configuration changes.
 <br/>
 <br/>
