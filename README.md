@@ -6,9 +6,9 @@ Vulnerability management is essential for organizations to identify and mitigate
 
 <h2>Environments Used </h2>
 
-- <b>Windows 10</b>
-- <b>Oracle VM VirtualBox</b>
-- <b>Nessus Essentials Vulnerability Scanner</b>
+- <b>Security Assertion Markup Language (SAML)</b>
+- <b>Okta</b>
+- <b>Microsoft Entra ID</b>
 
 <h2>Prerequisites:</h2> 
 
