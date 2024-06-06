@@ -10,10 +10,10 @@ Vulnerability management is essential for organizations to identify and mitigate
 - <b>Okta</b>
 - <b>Microsoft Entra ID</b>
 
-<h2>Create Okta Enterprise App in Microsoft Entra ID</h2> 
+<h2>Making Microsoft Entra ID an Identity Provider</h2> 
 
 <p align="center">
-To start, we will create an Okta enterprise app in Entra ID, which will allow Azure to communicate with Okta. Before we do this, however, it's important to set-up a break-glass account which will act as a backup account in case of an emergencty. For more information on the importance of break-glass accounts and access, refer to the following link: https://www.strongdm.com/blog/break-glass
+To start, we will configure Entra ID to be an identity provider, which will assign authentication to Entra ID. Before we do this, however, it's important to set-up a break-glass account which will act as a backup account in case of an emergencty. For more information on the importance of break-glass accounts and access, refer to the following link: https://www.strongdm.com/blog/break-glass
   <br/>
  <br/>
 Here are the steps in Okta to configure this account: Directory > People > Add person 
@@ -28,10 +28,7 @@ We will then add the new user to the Super Administrator role: User > Admin role
 <img src="https://i.imgur.com/LhGkYf9.png" alt="Super Administrator Role"/>
   <br/>
  <br/>
-We will now proceed with creating the enterprise application and adding Entra ID as an identity provider. I will be referencing the steps outlined in the following Okta documentation: 
-<br/>
-<br/>
-https://help.okta.com/en-us/content/topics/provisioning/azure/azure-create-enterprise-app.htm
+We will now proceed with adding Entra ID as an identity provider. I will be referencing the steps outlined in the following Okta documentation: 
 <br/>
 <br/>
 https://help.okta.com/en-us/content/topics/provisioning/azure/azure-identify-identity-provider.htm
@@ -40,130 +37,114 @@ https://help.okta.com/en-us/content/topics/provisioning/azure/azure-identify-ide
 Navigate to the following path: Security > Identity Providers > Add identity provider > SAML 2.0 IdP
  <br/>
  <br/>
-<img src="https://i.imgur.com/yuHcciM.png" alt="Add IdP/>
+<img src="https://i.imgur.com/yuHcciM.png" alt="Add IdP"/>
 <br/>
 <br/>
 We will now configure SAML 2.0 using the following settings: 
  <br/>
  <br/>
-<img src="https://i.imgur.com/jfwtPyg.png" alt="Add IdP/>
+<img src="https://i.imgur.com/jfwtPyg.png" alt="Select an IdP"/>
+ <br/>
+ <br/>
+<img src="https://i.imgur.com/tQ9gCxu.png" alt="Configure IdP"/>
+ <br/>
+ <br/>
+Ensure that you record the following values, as they will be necessary in the next steps: 'Assertion Consumer Service URL' and 'Audience URI'. 
  
-<h2>Uncredentialed scan:</h2> 
-Prior to running the first scan, it is important to verify that the host machine can connect to the virtual machine. In the Windows 10 virtual machine, navigate to the command line and use the 'ipconfig' command to gather the IPv4 address of the system. With this IPv4 address, navigate to the command line of the host machine and type in the command 'ping x.x.x.x,' where 'x.x.x.x' is the IPv4 address of the virtual machine. If the host machine is not able to ping the target machine, navigate to the Windows Defender Firewall (wf.msc) and make the appropriate firewall state configuration changes.
+<h2>Creating the Okta Enterprise App in Microsoft Entra ID</h2> 
+<p align="center">
+We will now create an Okta enterprise app in Entra ID, which will allow Azure to communicate with Okta. I will be referencing the following Okta documentation: 
 <br/>
 <br/>
-In Nessus, click 'New Scan,' then 'Basic Network Scan,' and provide a name for the scan as well as the virtual machine's IPv4 address in the 'Targets' category. Once the scan is saved, click the 'Launch' icon to begin the scan. The image below depicts the results of the first scan. The vulnerabilities discovered by the scan are primarily in the 'Info' severity, with one being in the 'Medium' severity. To read more about the severity levels assigned by Tenable, refer to the following link: https://docs.tenable.com/nessus/Content/RiskMetrics.htm. Without the use of privileged credentials, the scan is not able to go in-depth and find many vulnerabilities. Therefore, the next step is to perform a credentialed scan.
-<br />
-<br />
-<img src="https://i.imgur.com/xCn6H4G.png" height="60%" width="60%" alt="Uncredentialed Scan"/> 
-<br />
-<br />
-<img src="https://i.imgur.com/00b4WGs.png" height="60%" width="60%" alt="Uncredentialed Scan"/> 
-<h2>Credentialed scan:</h2> 
+https://help.okta.com/en-us/content/topics/provisioning/azure/azure-create-enterprise-app.htm
+<br/>
+<br/>
+Begin by navigating to the Azure portal and to the following location: Microsoft Entra ID > Enterprise applications > New application > Create your own application. 
+<br/>
+<br/>
+<img src="https://i.imgur.com/5kU6VKQ.png" alt="Create Application"/>
+<br/>
+<br/>
+<img src="https://i.imgur.com/p1iCU3w.png" alt="Configure Application"/>
+<br/>
+<br/>
+Once application has been created, navigate to 'Set up single sign on' and 'SAML':
+<br/>
+<br/>
+<img src="https://i.imgur.com/GdltHN0.png" alt="Set up SSO"/>
+<br/>
+<br/>
+<img src="https://i.imgur.com/3iLe5V6.png" alt="SAML Configuration"/>
+<br/>
+<br/>
+In the ‘Basic SAML Configuration’ section, enter placeholder URLs for ‘Identifier’ and ‘Reply URL’, and proceed to save the configuration. Select 'Download for Certificate (Base64)' in the SAML Signing Certificate area to download the certificate to your computer, which will be necessary for the next steps. 
+
+<h2>Mapping Microsoft Entra ID Attributes to Okta Attributes</h2> 
  <p align="center">
-In order to run a credentialed scan, the virtual machine must be configured to accept authenticated scans. The following link provided by Tenable describes how to configure the virtual machine for credentialed scans: https://community.tenable.com/s/article/Scanning-with-non-default-Windows-Administrator-Account?language=en_US. Some of the steps include enabling 'Remote Registry' and ensuring that 'File and Printer Sharing' is turned on in 'Advanced Sharing Settings.'
+SAML claims are are pieces of information about a user that are shared between different systems to help with logging in and accessing services, such as their name or email address. We will be editing our attributes and claims, which is essentially what information we want to send to Okta for authentication. 
  <br/>
  <br/>
- <img src="https://i.imgur.com/chTgvEo.png" height="70%" width="70%" alt="Remote Registry"/>
+ <img src="https://i.imgur.com/Pzmbstz.png" alt="Attributes and Claims"/>
   <br/>
-   <br/>
- <img src="https://i.imgur.com/3V8BHiM.png" height="70%" width="70%" alt="File and Printer Sharing"/>
- <br/>
- <br/>
-In Nessus, select the previous scan that was created, click 'More,' and then 'Configure.' Navigate to the 'Credentials' tab to the right of 'Settings.' The 'Authentication method' should be set to 'Password.' Enter the username and password of the target Windows 10 virtual machine. After saving these credentials, launch the scan. The image below displays the results of the first credentialed scan:
- <br/>
- <br/>
- <img src="https://i.imgur.com/6OoK2N3.png" height="60%" width="60%" alt="Credentialed Scan Results"/>
   <br/>
+In addition to the default claims, we will add company name and telephone number: 
+<br/>
  <br/>
- <img src="https://i.imgur.com/AFDXeDE.png" height="60%" width="60%" alt="Credentialed Scan Detailed Results"/>
-  <br/>
- <br/>
-In the previous uncredentialed scan, the highest severity was 'Medium,' with only 1 vulnerability in this category. In this credentialed scan, there are 7 'Medium' level vulnerabilities, 34 'High,' and 8 'Critical' vulnerabilities. These results further highlight the significance of performing credentialed scans. The two images below are a direct comparison of the results of the uncredentialed scan (left) and the credentialed scan (right). 
+ <img src="https://i.imgur.com/c3QstfC.png" alt="Additional Claims"/>
  <br/>
  <br/>
- <img src="https://i.imgur.com/25bx2Ph.png" height="30%" width="30%" alt="Uncredentialed Scan Results"/>     <img src="https://i.imgur.com/WjAcm6L.png" height="30%" width="30%" alt="Credentialed Scan Results"/>
+Return back to Okta, and navigate to SAML Certifications > Edit > New Certificate. Enter the following values to update the placeholders: the 'IdP Issuer URI' is the 'Microsoft Entra Identifier', the 'IdP Single Sign-On URL' is the 'Login URL', and the 'IdP Signature Certificate' is the 'Base64 download'. 
+<br/>
+ <br/>
+ <img src="https://i.imgur.com/DR3tYq1.png" alt="SAML Certificate"/>
+ <br/>
+ <br/>
+ <img src="https://i.imgur.com/peyTXNw.png" alt="SAML Values"/>
   <br/>
  <br/>
-For further analysis, I have downloaded a deprecated version of Firefox on the Windows 10 virtual machine. When installing deprecated software, it is vital to ensure that it is done in a sandboxed environment. I then relaunched the scan and got the following results:
+ Be sure to make note of the values above. The 'Assertion Consumer Service URL' will be the 'Reply URL in Azure', and the 'Audience URI' will be the 'Identity Entity ID' in Azure.  
+<br/>
+<br/>
+In Entra ID, update the placeholder values: 
+<br/>
+<br/>
+<img src="https://i.imgur.com/lDoz3p7.png" alt="SAML Configuration Update"/>
  <br/>
  <br/>
- <img src="https://i.imgur.com/nFye7ok.png" height="60%" width="60%" alt="Credentialed Scan Results w/ Firefox"/>
-  <br/>
- <br/>
- <img src="https://i.imgur.com/KLqflvy.png" height="50%" width="50%" alt="Credentialed Scan Detailed Results w/ Firefox"/>
-  <br/>
- <br/>
-Rather than having 7 'Medium' level vulnerabilities as in the first credentialed scan, there are now 23. The 'High' severity vulnerabilities increased from 34 to 108, and the 'Critical' level vulnerabilities increased from 8 to 86. These scan results emphasize the importance of ensuring that all third-party software are fully patched and up-to-date. Depicted below is a comparison of the first credentialed scan (left) to the second credentialed scan with the deprecated version of Firefox installed (right):
+Back in Okta, navigate to: Edit profile and mappings > Mappings. We will then unmap all attributes except 'username'. 
+<br/>
+<br/>
+<img src="https://i.imgur.com/trmCk9u.png" alt="Unmap Attributes"/>
  <br/>
  <br/>
- <img src="https://i.imgur.com/WjAcm6L.png" height="30%" width="30%" alt="Credentialed Scan Results"/>     <img src="https://i.imgur.com/FcqpzOC.png" height="30%" width="30%" alt="Credentialed Scan Results w/ Firefox"/>
-<h2>Remediation:</h2> 
- <p align="center">
-Prior to running a vulnerability scan, it is essential to ensure that both the operating system and all third-party software are fully up-to-date. This will significantly reduce the number of vulnerabilities present in the scan results and will allow the analyst to have more efficient vulnerability management. To further maximize efficiency, be sure to set up automatic updates on your operating system and third-party software.
+We will then navigate to 'Custom', and proceed to delete and recreate the attributes. For the attribute mapping, I will be referencing the following Okta documentation: https://help.okta.com/en-us/content/topics/provisioning/azure/azure-map-attributes.htm. Once the attributes are created, we will proceed with updating the mappings: 
  <br/>
  <br/>
-<img src="https://i.imgur.com/aMYixCT.png" height="60%" width="60%" alt="Uninstall Firefox"/>
+<img src="https://i.imgur.com/nzHv3uy.png" alt="Create Mappings"/>
 <br />
 <br />
- <img src="https://i.imgur.com/2aNsH9T.png" height="60%" width="60%" alt="Windows Updates"/>
+ <img src="https://i.imgur.com/r36IKV9.png" alt="Mapping Attributes"/>
  <br />
 <br />
-After uninstalling the deprecated Firefox and running Windows updates, I recieved the following scan result:
+We will test this out by navigating to our Okta application in Entra ID and assigning users to the application: Manage > users and groups > Add user/group 
 <br />
 <br />
-<img src="https://i.imgur.com/a1LVKQZ.png" height="60%" width="60%" alt="Windows Update Scan"/>
+<img src="https://i.imgur.com/519WGJ6.png" alt="Assign Users"/>
 <br />
 <br />
- <img src="https://i.imgur.com/XqWuev6.png" height="60%" width="60%" alt="Windows Update Scan"/>
+We are now ready to test the authentication! Navigate to Single sign-on > Test. 
 <br />
 <br />
-I then investigated more specific vulnerabilities for remediation. I found a few more vulnerabilities related to out-of-date software and installed the necessary software updates.
+<img src="https://i.imgur.com/XC7Yhjs.png" alt="Test the SSO"/>
 <br />
 <br />
-<img src="https://i.imgur.com/lj5Xcv0.png" height="70%" width="70%" alt="3D Viewer Vulnerability"/>
+<img src="https://i.imgur.com/ytzqWAk.png" alt="SSO Login"/>
 <br />
 <br />
- <img src="https://i.imgur.com/vY8a8LB.png" height="70%" width="70%" alt="3D Viewer Update"/>
+For advanced testing and troubleshooting, download the 'My Apps Secure Sign-in Extension' Chrome extenstion. As shown below, we were able to successfully authenticate! 
 <br />
 <br />
-<img src="https://i.imgur.com/Nv8j19h.png" height="70%" width="70%" alt="Onedrive Update"/>
-<br />
-<br />
-Missing or misconfigured registry keys can also cause vulnerabilities on a system. When configuring registry keys, it is crucial to ensure that the changes made align with the intended system or application settings and do not introduce unintended consequences or conflicts with existing configurations. To address the WinVerifyTrust Signature Validation Vulnerability (CVE-2013-3900), refer to the following link: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2013-3900.
-<br />
-<br />
- <img src="https://i.imgur.com/Zrx2GOj.png" height="70%" width="70%" alt="WinVerifyTrust Vulnerability"/>
-<br />
-<br />
-<img src="https://i.imgur.com/0eXXMzV.png" height="70%" width="70%" alt="WinVerifyTrust Remediation"/>
-<br />
-<br />
-I also addressed the 'SMB Signing not required' vulnerability, which has a 'Medium' severity level. This involved navigating to the 'Local Security Policy' and making the necessary configuration changes. The following link provides more information on how to resolve this vulnerability: https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/microsoft-network-server-digitally-sign-communications-always.
-<br />
-<br />
-<img src="https://i.imgur.com/AtNAkOd.png" height="70%" width="70%" alt="SMB Signing Vulnerability"/>
-<br />
-<br />
- <img src="https://i.imgur.com/lOaujty.png" height="70%" width="70%" alt="SMB Signing Remediation"/>
-<br />
-<br />
-<img src="https://i.imgur.com/3zNJDy1.png" height="70%" width="70%" alt="SMB Signing Remediation"/>
-<br />
-<br />
-After addressing these more specific vulnerabilities on the target system, I launched the final Nessus scan:
-<br />
-<br />
-<img src="https://i.imgur.com/X4tXd1e.png" height="60%" width="60%" alt="Final Scan Results"/>
-<br />
-<br />
- <img src="https://i.imgur.com/0rygP8U.png" height="60%" width="60%" alt="Final Scan Results"/>
-<br />
-<br />
-Rather than having 5 'Medium' level vulnerabilities as in the previous scan, there are now 0. The 'High' severity vulnerabilities decreased from 16 to 3, and the 'Critical' level vulnerabilities decreased from 2 to 1. Depicted below is a comparison of the previous scan after Firefox was uninstalled and Windows updates were run (left) to the most recent scan where more specific remediations were also made (right):
-<br />
-<br />
-<img src="https://i.imgur.com/cVK2O89.png" height="35%" width="35%" alt="Update Scan Results"/>     <img src="https://i.imgur.com/229wO2C.png" height="35%" width="35%" alt="Remediation Scan Results"/>
+<img src="https://i.imgur.com/fIbnlYn.png" alt="Successful SSO"/>
 <h2>Key takeaways:</h2>
  Credentialed scans are essential for identifying vulnerabilities in a system, as they allow Nessus to access and scan all parts of the system, including system files, registry entries, and application settings. This results in a more comprehensive and accurate assessment of the system's vulnerabilities.
 <br/>
