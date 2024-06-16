@@ -1,7 +1,7 @@
 <h1>Implementing Federation Between Azure and Okta</h1>
 
 <h2>Description</h2>
-Microsoft Entra ID and Okta are two leading identity management platforms that provide robust solutions for handling this complexity. By implementing federation between Entra ID and Okta, organizations can streamline authentication processes, enhance security, and improve user experience. This project aims to integrate these systems to create a seamless, unified access management framework that supports Single Sign-On (SSO) and centralized control over user identities and permissions.
+Microsoft Entra ID and Okta are two leading identity management platforms renowned for their robust solutions in handling complex authentication needs. By implementing federation between Entra ID and Okta, organizations can streamline authentication processes, enhance security, and improve user experience. This project aims to integrate these systems to create a seamless, unified access management framework that supports Single Sign-On (SSO) and centralized control over user identities and permissions.
 <br />
 
 <h2>Environments Used </h2>
@@ -13,22 +13,22 @@ Microsoft Entra ID and Okta are two leading identity management platforms that p
 <h2>Making Microsoft Entra ID an Identity Provider</h2> 
 
 <p align="center">
-To start, we will configure Entra ID to be an identity provider, which will assign authentication to Entra ID. Before we do this, however, it's important to set-up a break-glass account which will act as a backup account in case of an emergencty. For more information on the importance of break-glass accounts and access, refer to the following link: https://www.strongdm.com/blog/break-glass
-  <br/>
- <br/>
+To begin, we will configure Entra ID as the identity provider responsible for authentication. Before proceeding, it is crucial to set up a break-glass account. This account will serve as a backup in emergencies. For more details on the importance of break-glass accounts and access, please refer to the following link: https://www.strongdm.com/blog/break-glass
+<br/>
+<br/>
 Here are the steps in Okta to configure this account: Directory > People > Add person 
  <br/>
  <br/>
 <img src="https://i.imgur.com/NBmVOHA.png" alt="Add Okta User"/>
  <br/>
  <br/>
-We will then add the new user to the Super Administrator role: User > Admin roles > Edit individual assignments  > Role > Super Administrator > Save Changes 
+We will then add the new user to the 'Super Administrator' role: User > Admin roles > Edit individual assignments  > Role > Super Administrator > Save Changes 
  <br/>
  <br/>
 <img src="https://i.imgur.com/LhGkYf9.png" alt="Super Administrator Role"/>
   <br/>
  <br/>
-We will now proceed with adding Entra ID as an identity provider. I will be referencing the steps outlined in the following Okta documentation: 
+We will now proceed with adding Entra ID as an identity provider, following the steps outlined in the following Okta documentation:
 <br/>
 <br/>
 https://help.okta.com/en-us/content/topics/provisioning/azure/azure-identify-identity-provider.htm
@@ -49,11 +49,11 @@ We will now configure SAML 2.0 using the following settings:
 <img src="https://i.imgur.com/tQ9gCxu.png" alt="Configure IdP"/>
  <br/>
  <br/>
-Ensure that you record the following values, as they will be necessary in the next steps: 'Assertion Consumer Service URL' and 'Audience URI'. 
+Ensure to record the following values, as they will be necessary for the next steps: 'Assertion Consumer Service URL' and 'Audience URI'. 
  
 <h2>Creating the Okta Enterprise App in Microsoft Entra ID</h2> 
 <p align="center">
-We will now create an Okta enterprise app in Entra ID, which will allow Azure to communicate with Okta. I will be referencing the following Okta documentation: 
+We will now create an Okta enterprise app in Entra ID, facilitating communication between Azure and Okta. For guidance, I will refer to the following Okta documentation: 
 <br/>
 <br/>
 https://help.okta.com/en-us/content/topics/provisioning/azure/azure-create-enterprise-app.htm
@@ -77,17 +77,17 @@ Once application has been created, navigate to 'Set up single sign on' and 'SAML
 <img src="https://i.imgur.com/3iLe5V6.png" alt="SAML Configuration"/>
 <br/>
 <br/>
-In the ‘Basic SAML Configuration’ section, enter placeholder URLs for ‘Identifier’ and ‘Reply URL’, and proceed to save the configuration. Select 'Download for Certificate (Base64)' in the SAML Signing Certificate area to download the certificate to your computer, which will be necessary for the next steps. 
+In the ‘Basic SAML Configuration’ section, enter placeholder URLs for ‘Identifier’ and ‘Reply URL’, and proceed to save the configuration. Select 'Download for Certificate (Base64)' in the SAML Signing Certificate area to download the certificate to your computer, which will be required for the next steps. 
 
 <h2>Mapping Microsoft Entra ID Attributes to Okta Attributes</h2> 
  <p align="center">
-SAML claims are are pieces of information about a user that are shared between different systems to help with logging in and accessing services, such as their name or email address. We will be editing our attributes and claims, which is essentially what information we want to send to Okta for authentication. 
+SAML claims are pieces of information about a user that are shared between different systems to help with logging in and accessing services, such as their name or email address. We will be editing our attributes and claims, which is essentially what information we want to send to Okta for authentication. 
  <br/>
  <br/>
  <img src="https://i.imgur.com/Pzmbstz.png" alt="Attributes and Claims"/>
   <br/>
   <br/>
-In addition to the default claims, we will add company name and telephone number: 
+In addition to the default claims, we will add 'company name' and 'telephone number': 
 <br/>
  <br/>
  <img src="https://i.imgur.com/c3QstfC.png" alt="Additional Claims"/>
@@ -126,7 +126,7 @@ We will then navigate to 'Custom', and proceed to delete and recreate the attrib
  <img src="https://i.imgur.com/r36IKV9.png" alt="Mapping Attributes"/>
  <br />
 <br />
-We will test this out by navigating to our Okta application in Entra ID and assigning users to the application: Manage > users and groups > Add user/group 
+We will test the authentication by first navigating to our Okta application in Entra ID and assigning users to the application: Manage > users and groups > Add user/group 
 <br />
 <br />
 <img src="https://i.imgur.com/519WGJ6.png" alt="Assign Users"/>
@@ -141,7 +141,7 @@ We are now ready to test the authentication! Navigate to Single sign-on > Test.
 <img src="https://i.imgur.com/ytzqWAk.png" alt="SSO Login"/>
 <br />
 <br />
-For advanced testing and troubleshooting, download the 'My Apps Secure Sign-in Extension' Chrome extenstion. As shown below, we were able to successfully authenticate! 
+For advanced testing and troubleshooting, you may optionally download the 'My Apps Secure Sign-in Extension' Chrome extension. As demonstrated below, we successfully authenticated!
 <br />
 <br />
 <img src="https://i.imgur.com/fIbnlYn.png" alt="Successful SSO"/>
