@@ -1,7 +1,7 @@
 <h1>Implementing Federation Between Azure and Okta</h1>
 
 <h2>Description</h2>
-Microsoft Entra ID and Okta are two leading identity management platforms renowned for their robust solutions in handling complex authentication needs. By implementing federation between Entra ID and Okta, organizations can streamline authentication processes, enhance security, and improve user experience. This project aims to integrate these systems to create a seamless, unified access management framework that supports Single Sign-On (SSO) and centralized control over user identities and permissions.
+Microsoft Entra ID and Okta are two leading identity management platforms renowned for their ability to handle complex authentication needs. By implementing federation between Entra ID and Okta, organizations can streamline authentication processes, enhance security, and improve user experience. This project aims to integrate these systems to create a unified access management framework that supports Single Sign-On (SSO) and centralized control over user identities and permissions.
 <br />
 
 <h2>Environments Used </h2>
