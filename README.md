@@ -157,9 +157,6 @@ This involves establishing a secure communication link between Azure and Okta th
 <br/>
 Implementing federation between Azure and Okta offers significant benefits such as enhancing user experience by enabling Single Sign-On (SSO), allowing users to log in once and access multiple systems without repeated authentication. This streamlines the process and reduces the frustration of managing multiple passwords. From an administrative perspective, federation simplifies centralized management of user identities and access rights, reducing the overhead for IT teams. 
 <br/>
-<br/>   
-Security is improved through consistent application of policies like multi-factor authentication (MFA) across both platforms, providing protection against unauthorized access. Furthermore, operational efficiency is improved as automated provisioning and de-provisioning of user accounts ensure that employees have appropriate access from the moment they join or leave the organization.
-<br/>
 <br/>
 Federation is particularly valuable in several use cases such as for organizations operating in hybrid environments, where a mix of on-premises and cloud-based resources needs unified access management. It also facilitates secure cross-organizational collaboration, allowing external partners to access shared resources using their own identity systems. As companies expand their IT infrastructure, federation supports scalable identity solutions by seamlessly integrating multiple identity providers. 
 <br/>
