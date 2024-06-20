@@ -4,9 +4,8 @@
 Microsoft Entra ID and Okta are two leading identity management platforms renowned for their ability to handle complex authentication needs. By implementing federation between Entra ID and Okta, organizations can streamline authentication processes, enhance security, and improve user experience. This project aims to integrate these systems to create a unified access management framework that supports Single Sign-On (SSO) and centralized control over user identities and permissions. Here is a high-level architecture diagram that displays the configuration for this project: 
 <br />
 <br />
-<br />
 <p align="center">
-<img src="https://i.imgur.com/FcSwyjD.png" alt="Architecture Diagram"/>
+<img src="https://i.imgur.com/GEq961u.png" alt="Architecture Diagram"/>
 
 <h2>Environments Used </h2>
 
