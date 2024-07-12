@@ -5,7 +5,7 @@ Microsoft Entra ID and Okta are two leading identity management platforms renown
 <br />
 <br />
 <p align="center">
-<img src="https://i.imgur.com/GEq961u.png" alt="Architecture Diagram"/>
+<img src="https://i.imgur.com/8QEBtBI.png" alt="Architecture Diagram" width=80% height=80%/>
 
 <h2>Environments Used </h2>
 
